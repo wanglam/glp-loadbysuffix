@@ -18,11 +18,14 @@ module.exports = function (options) {
                 }
             }.bind({path:file.path}));
         }
-
+        if(file.path.indexOf("config") > -1){
+            console.log(file.path,isOtherSuffixFile);
+        }
         if(!isOtherSuffixFile){
             if(!isCurrentSuffix){
                 var fileExtName = path.extname(file.path);
-                var currentFileWithSuffix = path.dirname(file.path)+path.basename(file.path).replace(fileExtName,"."+suffix+fileExtName);
+                var currentFileWithSuffix = path.dirname(file.path)+"/"+path.basename(file.path).replace(fileExtName,"."+suffix+fileExtName);
+                
                 fs.access(currentFileWithSuffix,fs.R_OK,function(err){
                     if(err){
                         this.self.push(this.file);
