@@ -1,7 +1,7 @@
 {
   "name": "gulp-loadbysuffix",
   "version": "1.0.0",
-  "description": "",
+  "description": "> It's useful for load multi version file with same name.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -11,5 +11,14 @@
   "dependencies": {
     "gulp-util": "^3.0.7",
     "through2": "^2.0.0"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wanglam/gulp-loadbysuffix.git"
+  },
+  "bugs": {
+    "url": "https://github.com/wanglam/gulp-loadbysuffix/issues"
+  },
+  "homepage": "https://github.com/wanglam/gulp-loadbysuffix#readme"
 }
