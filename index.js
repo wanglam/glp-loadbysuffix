@@ -18,9 +18,6 @@ module.exports = function (options) {
                 }
             }.bind({path:file.path}));
         }
-        if(file.path.indexOf("config") > -1){
-            console.log(file.path,isOtherSuffixFile);
-        }
         if(!isOtherSuffixFile){
             if(!isCurrentSuffix){
                 var fileExtName = path.extname(file.path);
