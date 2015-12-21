@@ -20,17 +20,26 @@ module.exports = function (options) {
         }
         if(!isOtherSuffixFile){
             if(!isCurrentSuffix){
-                var fileExtName = path.extname(file.path);
-                var currentFileWithSuffix = path.dirname(file.path)+"/"+path.basename(file.path).replace(fileExtName,"."+suffix+fileExtName);
-                
-                fs.access(currentFileWithSuffix,fs.R_OK,function(err){
+                var noSuffixFilename = getNoSuffixFilename(path.basename(file.path,path.extname(file.path)),allSuffix);
+                fs.readdir(path.dirname(file.path), function(err,data){
                     if(err){
-                        this.self.push(this.file);
+                        this.callback();
+                    }else{
+                        var existsCurrentSuffixFlag = false;
+                        var currentSuffix = this.currentSuffix;
+                        data.forEach(function(oneFile){
+                            if( oneFile.indexOf(noSuffixFilename) > -1 && isIncludeSuffix(oneFile,currentSuffix)){
+                                existsCurrentSuffixFlag = true;
+                            }
+                        })
+                        if(!existsCurrentSuffixFlag){
+                            this.self.push(this.file);
+                        }
+                        this.callback();
                     }
-                    this.callback();
-                }.bind({callback:cb,file:file,self:this}));
+                }.bind({callback:cb,currentSuffix:suffix,file:file,self:this}))
             }else{
-                file.path = file.path.replace("."+suffix+".",".");
+                file.path = getNoSuffixFilename(file.path,allSuffix);
                 this.push(file);
                 cb();
             }   
@@ -39,6 +48,13 @@ module.exports = function (options) {
         }
     });
 };
+
+var getNoSuffixFilename = function(filename,allSuffix){
+    allSuffix.forEach(function(oneSuffix){
+        filename = filename.replace("."+oneSuffix+".",".");
+    });
+    return filename;
+}
 
 var isIncludeSuffix = function(path,suffix){
     return path.indexOf("."+suffix+".") > -1;

@@ -1,6 +1,6 @@
 {
   "name": "gulp-loadbysuffix",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "It's useful for load multi version file with same name.",
   "main": "index.js",
   "scripts": {
