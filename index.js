@@ -27,8 +27,9 @@ module.exports = function (options) {
                     }else{
                         var existsCurrentSuffixFlag = false;
                         var currentSuffix = this.currentSuffix;
+                        
                         data.forEach(function(oneFile){
-                            if( oneFile.indexOf(noSuffixFilename) > -1 && isIncludeSuffix(oneFile,currentSuffix)){
+                            if(getNoSuffixFilename(path.basename(oneFile,path.extname(oneFile)),allSuffix) === noSuffixFilename > -1 && isIncludeSuffix(oneFile,currentSuffix)){
                                 existsCurrentSuffixFlag = true;
                             }
                         })
