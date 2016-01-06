@@ -7,6 +7,7 @@ var path = require('path')
 module.exports = function (options) {
     var suffix = options.suffix;
     var allSuffix = options.allSuffix;
+
     return through.obj(function (file, enc, cb) {
         var isOtherSuffixFile = false;
         var isCurrentSuffix = isIncludeSuffix(file.path,suffix);
@@ -20,7 +21,7 @@ module.exports = function (options) {
         }
         if(!isOtherSuffixFile){
             if(!isCurrentSuffix){
-                var noSuffixFilename = getNoSuffixFilename(path.basename(file.path,path.extname(file.path)),allSuffix);
+                var noSuffixFilename = getNoSuffixFilename(getNoExtName(path.basename(file.path)),allSuffix);
                 fs.readdir(path.dirname(file.path), function(err,data){
                     if(err){
                         this.callback();
@@ -29,7 +30,7 @@ module.exports = function (options) {
                         var currentSuffix = this.currentSuffix;
                         
                         data.forEach(function(oneFile){
-                            if(getNoSuffixFilename(path.basename(oneFile,path.extname(oneFile)),allSuffix) === noSuffixFilename > -1 && isIncludeSuffix(oneFile,currentSuffix)){
+                            if(getNoSuffixFilename(getNoExtName(oneFile),allSuffix) === noSuffixFilename && isIncludeSuffix(oneFile,currentSuffix)){
                                 existsCurrentSuffixFlag = true;
                             }
                         })
@@ -54,9 +55,16 @@ var getNoSuffixFilename = function(filename,allSuffix){
     allSuffix.forEach(function(oneSuffix){
         filename = filename.replace("."+oneSuffix+".",".");
     });
+    if(/\.$/.test(filename)){
+        filename = filename.replace(/\.$/,"");
+    }
     return filename;
 }
 
 var isIncludeSuffix = function(path,suffix){
     return path.indexOf("."+suffix+".") > -1;
+}
+
+var getNoExtName = function(s){
+    return s.replace(new RegExp("\\"+path.extname(s)+"$"),".")
 }
